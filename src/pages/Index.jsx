@@ -1,7 +1,16 @@
-import { Container, Box, Heading, Text, VStack, HStack, IconButton, Image } from "@chakra-ui/react";
+import { Container, Box, Heading, Text, VStack, HStack, IconButton, Image, Button } from "@chakra-ui/react";
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={8} align="stretch">
@@ -26,18 +35,19 @@ const Index = () => {
             Latest Posts
           </Heading>
           <VStack spacing={4} align="stretch">
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">Post Title 1</Heading>
-              <Text mt={4}>This is a summary of the first blog post...</Text>
-            </Box>
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">Post Title 2</Heading>
-              <Text mt={4}>This is a summary of the second blog post...</Text>
-            </Box>
+            {posts.map((post, index) => (
+              <Box key={index} p={5} shadow="md" borderWidth="1px">
+                <Heading fontSize="xl">{post.title}</Heading>
+                <Text mt={4}>{post.content}</Text>
+              </Box>
+            ))}
           </VStack>
         </Box>
 
         <Box textAlign="center">
+          <Button as={Link} to="/add-post" colorScheme="teal" size="lg" mb={4}>
+            Add New Post
+          </Button>
           <Heading as="h2" size="lg" mb={4}>
             Connect with Me
           </Heading>
